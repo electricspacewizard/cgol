@@ -3,37 +3,36 @@ import matplotlib.pyplot as plt
 from scipy.signal import convolve2d
 import random
 
-
-universe = np.zeros((25,25))
-
-
 def get_life():
+
+    universe = np.zeros((25, 25))
+
     blinker = [1, 1, 1]
 
-    toad = [[1, 1, 1, 0],
-            [0, 1, 1, 1]]
+    toad =     [[1, 1, 1, 0],
+                [0, 1, 1, 1]]
 
-    glider = [[1, 0, 0],
-              [0, 1, 1],
-              [1, 1, 0]]
+    glider =   [[1, 0, 0],
+                [0, 1, 1],
+                [1, 1, 0]]
 
-    life_choices = [blinker, toad, glider]
+    beacon =   [[1, 1, 0, 0],
+                [1, 1, 0, 0],
+                [0, 0, 1, 1],
+                [0, 0, 1, 1]]
+
+    life_choices = [blinker, toad, glider, beacon]
 
     life = random.choice(life_choices)
 
-    """life = [[0, 0, 1, 1, 0],
-             [1, 1, 0, 1, 1],
-             [1, 1, 1, 1, 0],
-             [0, 1, 1, 0, 0]]"""
-
-    return life
+    return life, universe
 
 
 def run_life():
-    im = None
+    image_plot = None
     while True:
-        if not im:
-            life = get_life()
+        if not image_plot:
+            life, universe = get_life()
 
             # Get the number of rows in life
             rows = np.size(life, 0)
@@ -47,7 +46,7 @@ def run_life():
 
             try:
                 universe[x:x+rows, y:y+columns] = life
-                im = plt.imshow(universe, cmap="binary")
+                image_plot = plt.imshow(universe, cmap="binary")
             except:
                 print("life out of bounds")
         else:
@@ -55,7 +54,7 @@ def run_life():
             universe[new_universe < 2] = 0
             universe[new_universe == 3] = 1
             universe[new_universe > 3] = 0
-            im = plt.imshow(universe, cmap="binary")
+            image_plot = plt.imshow(universe, cmap="binary")
         plt.draw()
         plt.pause(0.5)
 
